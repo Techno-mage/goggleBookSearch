@@ -3,7 +3,7 @@ import {List} from "../components/List";
 import Book from "../components/Book";
 import Form from "../components/Form";
 import API from "../utils/API";
-
+import Jumbotron from "../components/Jumbotron"
 
 export default function Saved() {
 
@@ -34,6 +34,9 @@ export default function Saved() {
 
   return (
     <div>
+      <Jumbotron>
+        <h1>Your saved Books.</h1>
+      </Jumbotron>
       <List>
         {results.map(e =>{ return <Book
           key={e._id}
@@ -44,7 +47,8 @@ export default function Saved() {
           description = {e.description}
           image = {e.image}
           Button = {() => ( <button
-            onClick = {() =>removeBook(e._id)}>remove</button>)}
+            onClick = {() =>removeBook(e._id)}
+            class="btn btn-danger">remove</button>)}
 
           
           

@@ -3,6 +3,8 @@ import {List} from "../components/List";
 import Book from "../components/Book";
 import Form from "../components/Form";
 import API from "../utils/API";
+import {Container, Row} from "../components/Grid"
+import Jumbotron from "../components/Jumbotron"
 
 export default function Home() {
 
@@ -63,11 +65,18 @@ export default function Home() {
 
   return (
     <div>
+      <Jumbotron>
+        <h1>Search for Books.</h1>
+      </Jumbotron>
+      <Container>
+        <Row>
       <Form
         q={search}
         handleInputChange = {handleInputChange}
         handleFormSubmit = {handleFormSubmit}
       />
+      </Row>
+      </Container>
       <List>
         {results.map(e =>{ return <Book
           key={e.id}
@@ -78,7 +87,8 @@ export default function Home() {
           description = {e.volumeInfo.description}
           image = {e.volumeInfo.imageLinks.thumbnail}
           Button = {() => ( <button
-            onClick = {() =>handleSaveBook(e.id)}>save</button>)}
+            onClick = {() =>handleSaveBook(e.id)}
+            class="btn btn-primary">save</button>)}
 
           
           
