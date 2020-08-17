@@ -12,19 +12,38 @@ export default function Home() {
 
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
+  const [message, setMessage] = useState("");
   
 
   const handleInputChange = event => {
     setSearch(event.target.value)
   };
 
-  const handleFormSubmit = event =>{
-    event.preventDefault();
+  const handleSaveBook = id => {
+    //event.preventDefault();
+    const entry = results.find(b => b.id === id)
+
+    console.log(entry);
+
+    API.saveBook({
+      googleId: entry.id,
+      title: entry.volumeInfo.title,
+      subtitle: entry.volumeInfo.subtitle,
+      link: entry.volumeInfo.infoLink,
+      authors: entry.volumeInfo.authors,
+      description: entry.volumeInfo.description,
+      image: entry.volumeInfo.imageLinks.thumbnail
+    }).then(() => getBooks());
+    
+  }
+
+  const getBooks = () =>{
+    console.log(search)
     API.getBooks(search)
     .then( res => {
       console.log(res.data)
       if (res.data.length === 0) {
-        throw new Error("No results found.");
+        setMessage("no results found")
       }
       if (res.data.status === "error") {
         throw new Error(res.data.message);
@@ -36,6 +55,11 @@ export default function Home() {
     })
   }
 
+  const handleFormSubmit = event =>{
+    event.preventDefault();
+    getBooks()
+  }
+
 
   return (
     <div>
@@ -44,20 +68,23 @@ export default function Home() {
         handleInputChange = {handleInputChange}
         handleFormSubmit = {handleFormSubmit}
       />
-      {/* <List>
+      <List>
         {results.map(e =>{ return <Book
+          key={e.id}
           title = {e.volumeInfo.title}
           subtitle = {e.volumeInfo.subtitle}
           authors = {e.volumeInfo.authors}
           link = {e.volumeInfo.infoLink}
           description = {e.volumeInfo.description}
           image = {e.volumeInfo.imageLinks.thumbnail}
+          Button = {() => ( <button
+            onClick = {() =>handleSaveBook(e.id)}>save</button>)}
 
           
           
           />
         })}
-      </List> */}
+      </List>
 
       {console.log(results)}
 
