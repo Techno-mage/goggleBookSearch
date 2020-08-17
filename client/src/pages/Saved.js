@@ -11,19 +11,46 @@ export default function Saved() {
 
   useEffect(() => {
     document.title = "Saved books"
-
-    API.getSavedBooks()
-    .then(res => {
-      console.log(res.data)
-    })
+    getSaved();
+    
 
 
   }, [])
 
+  const getSaved = () => {
+    API.getSavedBooks()
+    .then(res => {
+      console.log(res.data)
+      setResults(res.data)
+    })
+  }
+
+  const removeBook = (id) =>{
+    console.log(id)
+    API.deleteBook(id)
+    .then(()=> getSaved())
+  }
+
 
   return (
     <div>
-      
+      <List>
+        {results.map(e =>{ return <Book
+          key={e._id}
+          title = {e.title}
+          subtitle = {e.subtitle}
+          authors = {e.authors}
+          link = {e.infoLink}
+          description = {e.description}
+          image = {e.image}
+          Button = {() => ( <button
+            onClick = {() =>removeBook(e._id)}>remove</button>)}
+
+          
+          
+          />
+        })}
+      </List>
     </div>
   )
 }
